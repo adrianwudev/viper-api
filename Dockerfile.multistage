@@ -1,0 +1,26 @@
+# syntax=docker/dockerfile:1
+# docker build --tag docker-viper:multistage -f Dockerfile.multistage .
+# docker build --tag adrianwudev/docker-viper:multistage -f Dockerfile.multistage .
+
+FROM golang:1.18-alpine AS build
+WORKDIR /app
+COPY go.mod ./
+COPY go.sum ./
+RUN go mod download
+# COPY *.go ./
+COPY . ./
+RUN go build -o /docker-viper
+#CMD [ "/docker-viper" ]
+
+## Deploy
+FROM gcr.io/distroless/base-debian10 AS deploy
+
+WORKDIR /
+
+COPY --from=build /docker-viper /docker-viper
+
+EXPOSE 8080
+
+USER root
+
+ENTRYPOINT [ "/docker-viper" ]

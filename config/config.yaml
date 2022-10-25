@@ -1,0 +1,8 @@
+config:
+  server:
+    dialect: "postgres"
+    host: "localhost"
+    dbport: "5432"
+    user: "postgres"
+    dbname: "book_keeper"
+    password: "abc123"
